@@ -1,5 +1,4 @@
 <template>
-
     <div class="max-h-screen overflow-hidden">
         <div class="containerMain">
             <!-- logo start -->

@@ -1,4 +1,6 @@
 <template>
+<div>
+    <div @click="closeModal" class="overlay" v-if="showModal"></div>
     <div class="containerContent no-scrollbar">
             <!-- content area start -->
             <div class="content">
@@ -122,20 +124,43 @@
         </div>
         <!-- buttons nav end-->
 
+        <!-- Modal window to confirm deletion -->
     </div>
+        <div>
+          <DeleteConfirmation v-if="showModal" @confirm="confirmDelete" @cancel="closeModal" />
+        </div>
+</div>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
-
+import DeleteConfirmation from "./DeleteConfirmation.vue";
 import store from "/src/store"
 
 const props = defineProps({
     post:Object
 })
-
 const toggleEdit = ref(false)
 const contentTemp=ref(props.post.content)
+const showModal = ref(false);
+
+    // Function for displaying a modal window
+const postDelete = () => {
+    showModal.value = true;
+    store.dispatch("toggleIntervalAction");
+};
+
+    // Function to confirm deletion
+const confirmDelete = () => {
+    store.dispatch("deletePostAction", props.post);
+    localStorage.setItem('store', JSON.stringify(store.getters.getPosts));
+    showModal.value = false;
+};
+
+    // Function to close the modal window without deleting
+const closeModal = () => {
+    showModal.value = false;
+};
 
 //post like
 const postLike = ()=>{
@@ -170,12 +195,6 @@ const postEditAccept =()=>{
     }
 }
 
-//post delete
-const postDelete = ()=>{
-    store.dispatch("deletePostAction",props.post)
-    localStorage.setItem('store', JSON.stringify(store.getters.getPosts))
-}
-
 
 // format date 
 const formatDate = computed(()=>{
@@ -186,6 +205,15 @@ const formatDate = computed(()=>{
 </script>
 
 <style scoped>
+.overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
 .containerContent{
     @apply
     md:w-[26rem] w-full

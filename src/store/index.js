@@ -1,7 +1,8 @@
 import { createStore } from "vuex";
 const store = createStore({
     state:{
-        posts:[]
+        posts:[],
+        isIntervalRunning: false
     },
     getters:{
         getPosts(state){
@@ -13,8 +14,13 @@ const store = createStore({
             state.posts = [...state.posts, value];
 
         },
+        clearChat(state){
+            state.posts = [];
+        },
+
         deletePost(state,value){
-            state.posts = state.posts.filter(i => i!=value)
+            // state.posts = state.posts.filter(i => i!=value)
+            state.posts = state.posts.filter(({postid}) => postid !== value.postid);
         },
         updatePost(state,value){
             state.posts.map(i => {
@@ -55,6 +61,12 @@ const store = createStore({
         setPosts(state,value){
             state.posts = value
         },
+        setRunningState(state, value) {
+            state.isIntervalRunning = value;
+        },
+        toggleInterval(state) {
+            state.isIntervalRunning = !state.isIntervalRunning;
+        }
     },
     actions:{
         addPostAction(context,valuePost){
@@ -74,8 +86,14 @@ const store = createStore({
         },
         setPostsAction(context,value){
             context.commit('setPosts',value)
-
-        }
+        },
+        clearChatAction({ commit }){
+            commit('clearChat');
+        },
+        toggleIntervalAction( context ) {
+            const currentState = context.state.isIntervalRunning;
+            context.commit('toggleInterval', !currentState);
+        },
     }
 })
 
