@@ -49,3 +49,7 @@ npm install                                                 // Install dependenc
 npm run dev                                                 // Run development mode.
 npm run build                                               // Build the project.
 ```# Octowitter_Vue.js
+
+
+
+A new functionality has been added to the application. When deleting a post, a deletion confirmation pops up, as well as an automatic post addition after 5 seconds, followed by automatic deletion also after 5 seconds. For convenience, a button for full chat clearing has been added. To start automatic post additions, click the start/stop button.
